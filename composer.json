@@ -1,0 +1,23 @@
+{
+    "name": "restaurante/ms-reservas",
+    "description": "microservicio de reservas y mesas",
+    "type": "project",
+    "license": "mit",
+    "autoload": {
+        "psr-4": {
+            "Restaurante\\MsReservas\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "martinezz144hz",
+            "email": "mamartinezc@uniboyaca.edu.co"
+        }
+    ],
+    "require": {
+        "slim/slim": "^4.15",
+        "slim/psr7": "^1.8",
+        "illuminate/database": "^12.61",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
