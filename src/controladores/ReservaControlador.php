@@ -8,18 +8,16 @@ require __DIR__ . '/../modelos/Mesa.php';
 
 class ReservaControlador {
 
-    // ============================================
-    // LISTAR RESERVAS
-    // ============================================
+    //enlistar las reservas
+
     public function listar(Request $request, Response $response): Response {
         $reservas = Reserva::all();
 
         return $this->respuesta($response, $reservas->toArray(), 200);
     }
 
-    // ============================================
-    // CREAR RESERVA
-    // ============================================
+// crear una reserva
+
     public function crear(Request $request, Response $response): Response {
         $datos = $request->getParsedBody();
 
@@ -37,7 +35,7 @@ class ReservaControlador {
             ], 400);
         }
 
-        // Verificar que la mesa exista
+        //  mesa existe
         $mesa = Mesa::find($mesa_id);
         if (!$mesa) {
             return $this->respuesta($response, [
@@ -45,7 +43,7 @@ class ReservaControlador {
             ], 404);
         }
 
-        // Verificar que la mesa esté disponible
+        //  mesa esté disponible
         if ($mesa->estado !== 'disponible') {
             return $this->respuesta($response, [
                 'message' => 'La mesa no está disponible.'
@@ -73,9 +71,8 @@ class ReservaControlador {
         ], 201);
     }
 
-    // ============================================
-    // EDITAR RESERVA
-    // ============================================
+    // editar la reserva
+
     public function editar(Request $request, Response $response, array $args): Response {
         $id    = $args['id'];
         $datos = $request->getParsedBody();
@@ -102,9 +99,8 @@ class ReservaControlador {
         ], 200);
     }
 
-    // ============================================
-    // CANCELAR RESERVA
-    // ============================================
+    // cancelar la reserva
+
     public function cancelar(Request $request, Response $response, array $args): Response {
         $id      = $args['id'];
         $reserva = Reserva::find($id);
@@ -131,9 +127,8 @@ class ReservaControlador {
         ], 200);
     }
 
-    // ============================================
-    // HELPER — respuesta JSON
-    // ============================================
+   // respuesta de json
+   
     private function respuesta(Response $response, array $datos, int $codigo): Response {
         $response->getBody()->write(json_encode($datos));
         return $response

@@ -6,15 +6,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// ============================================
-// CARGAR VARIABLES DE ENTORNO (.env)
-// ============================================
+//cargar la variable de retorno
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-// ============================================
-// CONEXIÓN A BASE DE DATOS CON ELOQUENT
-// ============================================
+//conexion a la base de datos
 $capsule = new Illuminate\Database\Capsule\Manager;
 $capsule->addConnection([
     'driver'    => 'mysql',
@@ -30,20 +27,16 @@ $capsule->addConnection([
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-// ============================================
-// CREAR APP SLIM
-// ============================================
+//crear la app slim
+
 $app = AppFactory::create();
 
-// Middleware para parsear JSON en el body
+// Middleware para  JSON en el body
 $app->addBodyParsingMiddleware();
 
 // Middleware de errores
 $app->addErrorMiddleware(true, true, true);
 
-// ============================================
-// HEADERS CORS
-// ============================================
 $app->add(function (Request $request, $handler) {
     $response = $handler->handle($request);
     return $response
@@ -52,17 +45,12 @@ $app->add(function (Request $request, $handler) {
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 });
 
-// Responder preflight OPTIONS
 $app->options('/{routes:.+}', function (Request $request, Response $response) {
     return $response;
 });
 
-// ============================================
-// RUTAS
-// ============================================
+//conexion con rutas
+
 require __DIR__ . '/../src/rutas.php';
 
-// ============================================
-// CORRER APP
-// ============================================
 $app->run();

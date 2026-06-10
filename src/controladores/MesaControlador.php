@@ -7,18 +7,16 @@ require __DIR__ . '/../modelos/Mesa.php';
 
 class MesaControlador {
 
-    // ============================================
-    // LISTAR MESAS
-    // ============================================
+   //enlistar las mesas
+
     public function listar(Request $request, Response $response): Response {
         $mesas = Mesa::all();
 
         return $this->respuesta($response, $mesas->toArray(), 200);
     }
 
-    // ============================================
-    // CREAR MESA
-    // ============================================
+   // crear mesa
+
     public function crear(Request $request, Response $response): Response {
         $datos = $request->getParsedBody();
 
@@ -52,9 +50,8 @@ class MesaControlador {
         ], 201);
     }
 
-    // ============================================
-    // EDITAR MESA
-    // ============================================
+    //editar mesa 
+
     public function editar(Request $request, Response $response, array $args): Response {
         $id    = $args['id'];
         $datos = $request->getParsedBody();
@@ -78,9 +75,8 @@ class MesaControlador {
         ], 200);
     }
 
-    // ============================================
-    // ELIMINAR MESA
-    // ============================================
+   //eliminar mesa
+
     public function eliminar(Request $request, Response $response, array $args): Response {
         $id   = $args['id'];
         $mesa = Mesa::find($id);
@@ -98,9 +94,8 @@ class MesaControlador {
         ], 200);
     }
 
-    // ============================================
-    // HELPER — respuesta JSON
-    // ============================================
+   //respuesta de json
+   
     private function respuesta(Response $response, array $datos, int $codigo): Response {
         $response->getBody()->write(json_encode($datos));
         return $response
