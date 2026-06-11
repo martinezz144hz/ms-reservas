@@ -7,16 +7,14 @@ require __DIR__ . '/../modelos/Mesa.php';
 
 class MesaControlador {
 
-   //enlistar las mesas
-
+    //enlistar las mesas
     public function listar(Request $request, Response $response): Response {
         $mesas = Mesa::all();
 
         return $this->respuesta($response, $mesas->toArray(), 200);
     }
 
-   // crear mesa
-
+    // crear mesa
     public function crear(Request $request, Response $response): Response {
         $datos = $request->getParsedBody();
 
@@ -50,8 +48,7 @@ class MesaControlador {
         ], 201);
     }
 
-    //editar mesa 
-
+    //editar mesa
     public function editar(Request $request, Response $response, array $args): Response {
         $id    = $args['id'];
         $datos = $request->getParsedBody();
@@ -75,8 +72,7 @@ class MesaControlador {
         ], 200);
     }
 
-   //eliminar mesa
-
+    //eliminar mesa
     public function eliminar(Request $request, Response $response, array $args): Response {
         $id   = $args['id'];
         $mesa = Mesa::find($id);
@@ -94,8 +90,50 @@ class MesaControlador {
         ], 200);
     }
 
-   //respuesta de json
-   
+    // obtener una mesa
+    public function obtener(Request $request, Response $response, array $args): Response {
+        $id   = $args['id'];
+        $mesa = Mesa::find($id);
+
+        if (!$mesa) {
+            return $this->respuesta($response, [
+                'message' => 'Mesa no encontrada.'
+            ], 404);
+        }
+
+        return $this->respuesta($response, $mesa->toArray(), 200);
+    }
+
+    // cambiar estado de mesa
+    public function cambiarEstado(Request $request, Response $response, array $args): Response {
+        $id     = $args['id'];
+        $datos  = $request->getParsedBody();
+        $estado = $datos['estado'] ?? '';
+
+        if (empty($estado)) {
+            return $this->respuesta($response, [
+                'message' => 'El estado es requerido.'
+            ], 400);
+        }
+
+        $mesa = Mesa::find($id);
+
+        if (!$mesa) {
+            return $this->respuesta($response, [
+                'message' => 'Mesa no encontrada.'
+            ], 404);
+        }
+
+        $mesa->estado = $estado;
+        $mesa->save();
+
+        return $this->respuesta($response, [
+            'message' => 'Estado actualizado correctamente.',
+            'mesa'    => $mesa->toArray()
+        ], 200);
+    }
+
+    //respuesta de json
     private function respuesta(Response $response, array $datos, int $codigo): Response {
         $response->getBody()->write(json_encode($datos));
         return $response
@@ -104,4 +142,3 @@ class MesaControlador {
     }
 }
 
-//brrrrr

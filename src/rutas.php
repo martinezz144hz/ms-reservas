@@ -54,6 +54,15 @@ $app->delete('/reservas/{id}', function (Request $request, Response $response, a
     return $reservaControlador->cancelar($request, $response, $args);
 })->add($authMiddleware);
 
+$app->get('/mesas/{id}', function (Request $request, Response $response, array $args) use ($mesaControlador) {
+    return $mesaControlador->obtener($request, $response, $args);
+})->add($authMiddleware);
+
+
+$app->put('/mesas/{id}/estado', function (Request $request, Response $response, array $args) use ($mesaControlador) {
+    return $mesaControlador->cambiarEstado($request, $response, $args);
+})->add($authMiddleware);
+
 //  endpoint verifica que el servicio este activo
 $app->get('/', function (Request $request, Response $response) {
     $response->getBody()->write(json_encode([
